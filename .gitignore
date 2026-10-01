@@ -1,0 +1,44 @@
+# ---- build output ----
+backend/target/
+frontend/dist/
+frontend/.vite/
+*.class
+*.jar
+*.war
+
+# ---- dependencies ----
+frontend/node_modules/
+node_modules/
+
+# ---- logs & OS ----
+*.log
+*.err
+*.out
+logs/
+.DS_Store
+Thumbs.db
+*.pid
+
+# ---- secrets: never commit ----
+login.json
+**/login.json
+*.env
+.env
+.env.*
+!.env.example
+application-local.properties
+application-prod.properties
+
+# ---- IDE ----
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# ---- AI/tooling scaffolding ----
+.qodo/
+.github/modernize/
+
+# ---- local scratch ----
+frontend/npm
+
