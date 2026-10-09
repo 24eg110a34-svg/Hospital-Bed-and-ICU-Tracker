@@ -320,6 +320,55 @@ class BedAllocationServiceEligibilityTest {
         }
 
         @Test
+        @DisplayName("dialysis-requiring ICU patient matches a dialysis-capable ICU bed")
+        void dialysisPatientMatchesEquippedIcuBed() {
+            Patient p = patient(1);
+            p.setRequiredBedType(BedType.ICU);
+            p.setRequiredWardType("ICU");
+            p.setRequiresVentilator(true);
+            p.setRequiresOxygen(true);
+            p.setRequiresDialysis(true);
+
+            Bed icuWithDialysis = bed(1L, "ICU-1", BedStatus.AVAILABLE, BedType.ICU, "ICU");
+            icuWithDialysis.setHasVentilator(true);
+            icuWithDialysis.setHasOxygen(true);
+            icuWithDialysis.setHasDialysis(true);
+
+            Bed icuWithoutDialysis = bed(2L, "ICU-2", BedStatus.AVAILABLE, BedType.ICU, "ICU");
+            icuWithoutDialysis.setHasVentilator(true);
+            icuWithoutDialysis.setHasOxygen(true);
+
+            BedEligibilityDTO match = service.evaluate(p, icuWithDialysis);
+            BedEligibilityDTO noMatch = service.evaluate(p, icuWithoutDialysis);
+
+            assertThat(match.isEligible()).isTrue();
+            assertThat(match.getScore()).isEqualTo(15 + 10 + 15 + 60 + 5);
+            assertThat(match.getScoreLabel()).isEqualTo("SUITABLE");
+            assertThat(noMatch.isEligible()).isFalse();
+            assertThat(noMatch.getReason()).contains("dialysis");
+        }
+
+        @Test
+        @DisplayName("isolation-requiring patient matches an isolation-capable bed")
+        void isolationPatientMatchesIsolationBed() {
+            Patient p = patient(3);
+            p.setRequiredBedType(BedType.ISOLATION);
+            p.setRequiredWardType("ISOLATION");
+            p.setRequiresIsolation(true);
+            p.setRequiresOxygen(true);
+
+            Bed isoBed = bed(1L, "ISO-1", BedStatus.AVAILABLE, BedType.ISOLATION, "ISOLATION");
+            isoBed.setIsIsolation(true);
+            isoBed.setHasOxygen(true);
+
+            Bed generalBed = bed(2L, "GEN-1", BedStatus.AVAILABLE, BedType.GENERAL, "GENERAL");
+            generalBed.setHasOxygen(true);
+
+            assertThat(service.evaluate(p, isoBed).isEligible()).isTrue();
+            assertThat(service.evaluate(p, generalBed).isEligible()).isFalse();
+        }
+
+        @Test
         @DisplayName("feature list reflects what the bed actually has")
         void featuresDescribeBed() {
             Bed b = availableBed("ICU");

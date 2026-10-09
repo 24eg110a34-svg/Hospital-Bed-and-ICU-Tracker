@@ -53,13 +53,13 @@ public class DataInitializer {
             Ward surgery = ward("Surgery", "SURGERY", 4, 8, hospital);
 
             int total = 0;
-            total += seedBeds(icu, "ICU", BedType.ICU, 10, 6, 0, 0, 0, true, true, true, false, false, 3);
+            total += seedBeds(icu, "ICU", BedType.ICU, 10, 6, 0, 0, 0, true, true, true, false, true, 3);
             total += seedBeds(er, "ER", BedType.EMERGENCY, 12, 8, 0, 0, 0, false, false, true, false, false, 0);
             total += seedBeds(general, "GEN", BedType.GENERAL, 15, 11, 0, 1, 3, false, false, false, false, false, 2);
             total += seedBeds(hdu, "HDU", BedType.HDU, 6, 4, 0, 0, 2, false, true, true, false, false, 3);
-            total += seedBeds(isolation, "ISO", BedType.ISOLATION, 6, 4, 0, 0, 2, false, false, true, false, true, 1);
+            total += seedBeds(isolation, "ISO", BedType.ISOLATION, 6, 4, 0, 0, 2, false, false, true, true, false, 1);
             total += seedBeds(pediatrics, "PED", BedType.GENERAL, 8, 8, 0, 0, 0, false, false, false, false, false, 2);
-            total += seedBeds(cardiology, "CAR", BedType.GENERAL, 6, 4, 0, 0, 2, false, false, true, true, false, 4);
+            total += seedBeds(cardiology, "CAR", BedType.GENERAL, 6, 4, 0, 0, 2, false, true, true, false, true, 4);
             total += seedBeds(surgery, "SUR", BedType.GENERAL, 8, 5, 0, 0, 3, false, false, false, false, false, 4);
             System.out.println("Seeded " + total + " beds across 8 wards");
         }
